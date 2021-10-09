@@ -31,10 +31,10 @@ var validCancelReasonValues = []string{
 }
 
 func newCancelReason(v string) (*cancelReason, error) {
-	if !contains(validCancelReasonValues, v) {
+	if v != "" && !contains(validCancelReasonValues, v) {
 		return &cancelReason{}, errors.New("cancelReason value should be one of the following:" + strings.Join(validCancelReasonValues, ","))
 	}
-	return &cancelReason{value: null.StringFrom(v)}, nil
+	return &cancelReason{value: null.NewString(v, v != "")}, nil
 }
 
 func (c cancelReason) String() string {
@@ -56,9 +56,6 @@ func (c *cancelReason) UnmarshalJSON(b []byte) error {
 	err := v.value.UnmarshalJSON(b)
 	if err != nil {
 		return fmt.Errorf("failed to unmarshal the value of cancel_reason: %w", err)
-	}
-	if !v.value.Valid {
-		return errors.New("cancel_reason is a required field")
 	}
 	_c, err := newCancelReason(v.value.ValueOrZero())
 	if err != nil {
