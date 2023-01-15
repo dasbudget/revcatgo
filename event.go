@@ -43,6 +43,8 @@ type Event struct {
 	TransactionID            string               `json:"transaction_id"`
 	OriginalTransactionID    string               `json:"original_transaction_id"`
 	OfferCode                string               `json:"offer_code"`
+	TransferredFrom          []string             `json:"transferred_from"`
+	TransferredTo            []string             `json:"transferred_to"`
 }
 
 // IsExpired checks whether a subscription is expired or not.
@@ -73,6 +75,12 @@ func (e *Event) GetAllRelatedUserID() []string {
 	}
 	if len(e.Aliases) > 0 {
 		idList = append(idList, e.Aliases...)
+	}
+	if len(e.TransferredFrom) > 0 {
+		idList = append(idList, e.TransferredFrom...)
+	}
+	if len(e.TransferredTo) > 0 {
+		idList = append(idList, e.TransferredTo...)
 	}
 	var uniqueIDList []string
 
