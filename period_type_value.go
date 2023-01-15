@@ -27,10 +27,10 @@ type periodType struct {
 }
 
 func newPeriodType(s string) (*periodType, error) {
-	if !contains(validperiodTypeValues, s) {
+	if s != "" && !contains(validperiodTypeValues, s) {
 		return &periodType{}, errors.New("periodType value should be one of the following:" + strings.Join(validperiodTypeValues, ","))
 	}
-	return &periodType{value: null.StringFrom(s)}, nil
+	return &periodType{value: null.NewString(s, s != "")}, nil
 }
 
 func (p periodType) String() string {
@@ -48,9 +48,7 @@ func (p *periodType) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return fmt.Errorf("failed to unmarshal the value of period_type: %w", err)
 	}
-	if !v.value.Valid {
-		return errors.New("period_type is a required field")
-	}
+
 	_p, err := newPeriodType(strings.ToUpper(v.value.ValueOrZero()))
 	if err != nil {
 		return fmt.Errorf("failed to unmarshal the value of period_type: %w", err)

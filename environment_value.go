@@ -23,10 +23,10 @@ var validEnvironmentValues = []string{
 }
 
 func newEnvironment(s string) (*environment, error) {
-	if !contains(validEnvironmentValues, s) {
+	if s != "" && !contains(validEnvironmentValues, s) {
 		return &environment{}, errors.New("environment value should be one of the following:" + strings.Join(validEnvironmentValues, ","))
 	}
-	return &environment{value: null.StringFrom(s)}, nil
+	return &environment{value: null.NewString(s, s != "")}, nil
 }
 
 func (e environment) String() string {
@@ -53,9 +53,7 @@ func (e *environment) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return fmt.Errorf("failed to unmarshal the value of environment: %w", err)
 	}
-	if !v.value.Valid {
-		return errors.New("environment is a required field")
-	}
+
 	_e, err := newEnvironment(v.value.ValueOrZero())
 	if err != nil {
 		return fmt.Errorf("failed to unmarshal the value of environment: %w", err)

@@ -52,7 +52,7 @@ func (c cancelReason) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON deserializes a store from JSON
 func (c *cancelReason) UnmarshalJSON(b []byte) error {
-	v := &environment{}
+	v := &cancelReason{}
 	err := v.value.UnmarshalJSON(b)
 	if err != nil {
 		return fmt.Errorf("failed to unmarshal the value of cancel_reason: %w", err)
